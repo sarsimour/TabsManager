@@ -5,7 +5,11 @@
   "description": "A Chrome extension for managing tabs and bookmarks efficiently",
   "permissions": [
     "tabs",
-    "bookmarks"
+    "bookmarks",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -13,5 +17,8 @@
   },
   "icons": {
     "48": "icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 } 
