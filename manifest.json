@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Tabs Manager",
+  "version": "1.0",
+  "description": "A Chrome extension for managing tabs and bookmarks efficiently",
+  "permissions": [
+    "tabs",
+    "bookmarks"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "48": "icon.png"
+  }
+} 
