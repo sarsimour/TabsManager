@@ -2,24 +2,45 @@
 
 A Chrome extension for managing tabs and bookmarks efficiently.
 
-## Current Features (v1.0)
-- List all open tabs
-- Search tabs by title or URL
-- Click on a tab to switch to it
-- Simple and clean interface
+## Features
+- Fast fuzzy search across all open tabs
+- Keyboard-driven navigation
+- Search in both tab titles and URLs
+- Quick tab switching
+- Clean and simple interface
 
 ## Installation Instructions
 1. Open Chrome and go to `chrome://extensions/`
 2. Enable "Developer mode" in the top right corner
 3. Click "Load unpacked" and select this directory
+4. Configure keyboard shortcut (recommended):
+   - Go to `chrome://extensions/shortcuts`
+   - Find "Tabs Manager"
+   - Set shortcut to `Ctrl+K` (Windows/Linux) or `Cmd+K` (Mac)
 
 ## How to Use
-1. Click the extension icon in your Chrome toolbar
-2. Use the search box to filter tabs by title or URL
-3. Click on any tab in the list to switch to it
 
-## Development Plan
-[Previous development plan content...]
+### Opening the Tab Manager
+Two ways to open:
+- Click the extension icon in Chrome toolbar
+- Press `Ctrl+K` (Windows/Linux) or `Cmd+K` (Mac) after setting up the shortcut
+
+### Keyboard Navigation
+- Type to search across all open tabs
+- Use `↑` `↓` arrows to navigate through results
+- Press `Enter` to switch to selected tab
+- Press `Esc` to close the manager
+
+### Search Tips
+- Search matches both tab titles and URLs
+- Fuzzy search allows for typos and partial matches
+- Results are sorted by relevance
+- The current number of matching tabs is shown below the search box
+
+### Mouse Navigation
+- Hover over tabs to select them
+- Click any tab to switch to it
+- Click outside the popup to close it
 
 ## Next Steps
 - Add bookmark management
