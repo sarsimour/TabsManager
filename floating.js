@@ -2,13 +2,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('searchInput');
   const tabsList = document.getElementById('tabsList');
   const searchStats = document.getElementById('searchStats');
-  let allTabs = [];
+  let allItems = [];
   let selectedIndex = -1;
   let fuse = null;
 
-  // Initialize Fuse.js options
+  // Initialize Fuse.js options with weights for different fields
   const fuseOptions = {
-    keys: ['title', 'url'],
+    keys: [
+      { name: 'title', weight: 0.4 },
+      { name: 'url', weight: 0.3 },
+      { name: 'type', weight: 0.3 }
+    ],
     includeScore: true,
     threshold: 0.4,
     shouldSort: true,
@@ -16,20 +20,20 @@ document.addEventListener('DOMContentLoaded', function() {
     findAllMatches: true
   };
 
-  // Load all tabs when window opens
-  loadTabs();
+  // Load all items when window opens
+  loadAllItems();
   
   // Focus search input immediately
   searchInput.focus();
 
   // Add search functionality
   searchInput.addEventListener('input', function(e) {
-    searchTabs(e.target.value);
+    searchItems(e.target.value);
   });
 
   // Add keyboard navigation
   document.addEventListener('keydown', function(e) {
-    const items = tabsList.getElementsByClassName('tab-item');
+    const items = tabsList.getElementsByClassName('item');
     
     switch(e.key) {
       case 'ArrowDown':
@@ -65,88 +69,146 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  function loadAllItems() {
+    Promise.all([loadTabs(), loadAllBookmarks()])
+      .then(([tabs, bookmarks]) => {
+        allItems = [
+          ...tabs.map(tab => ({ ...tab, type: 'tab' })),
+          ...bookmarks.map(bookmark => ({ ...bookmark, type: 'bookmark' }))
+        ];
+        fuse = new Fuse(allItems, fuseOptions);
+        displayAllItems();
+      })
+      .catch(error => {
+        console.error('Error loading items:', error);
+        // Still show tabs even if bookmarks fail
+        loadTabs().then(tabs => {
+          allItems = tabs.map(tab => ({ ...tab, type: 'tab' }));
+          fuse = new Fuse(allItems, fuseOptions);
+          displayAllItems();
+        });
+      });
+  }
+
   function loadTabs() {
-    chrome.tabs.query({}, function(tabs) {
-      console.log('Loaded tabs:', tabs);
-      if (chrome.runtime.lastError) {
-        console.error('Error loading tabs:', chrome.runtime.lastError);
-        return;
-      }
-
-      if (!tabs || tabs.length === 0) {
-        tabsList.innerHTML = '<div class="tab-item">No tabs found</div>';
-        return;
-      }
-
-      allTabs = tabs;
-      fuse = new Fuse(allTabs, fuseOptions);
-      displayAllTabs();
+    return new Promise((resolve) => {
+      chrome.tabs.query({}, function(tabs) {
+        if (chrome.runtime.lastError) {
+          console.error('Error loading tabs:', chrome.runtime.lastError);
+          resolve([]);
+          return;
+        }
+        resolve(tabs || []);
+      });
     });
   }
 
-  function displayAllTabs() {
-    renderTabs(allTabs, '');
-    updateSearchStats(allTabs.length, allTabs.length);
+  function loadAllBookmarks() {
+    return new Promise((resolve) => {
+      try {
+        chrome.bookmarks.getTree(function(bookmarkTreeNodes) {
+          if (chrome.runtime.lastError) {
+            console.error('Error loading bookmarks:', chrome.runtime.lastError);
+            resolve([]);
+            return;
+          }
+          
+          const bookmarks = [];
+          
+          function processNode(node) {
+            if (node.url) {
+              bookmarks.push({
+                id: node.id,
+                title: node.title,
+                url: node.url
+              });
+            }
+            if (node.children) {
+              node.children.forEach(processNode);
+            }
+          }
+          
+          bookmarkTreeNodes.forEach(processNode);
+          resolve(bookmarks);
+        });
+      } catch (error) {
+        console.error('Error in loadAllBookmarks:', error);
+        resolve([]);
+      }
+    });
   }
 
-  function searchTabs(searchQuery = '') {
-    if (!allTabs || allTabs.length === 0) {
-      console.log('No tabs available for search');
+  function displayAllItems() {
+    renderItems(allItems, '');
+    updateSearchStats(allItems.length, allItems.length);
+  }
+
+  function searchItems(searchQuery = '') {
+    if (!allItems || allItems.length === 0) {
+      console.log('No items available for search');
       return;
     }
 
-    let filteredTabs = allTabs;
+    let filteredItems = allItems;
     selectedIndex = 0;
 
     if (searchQuery.trim()) {
       if (!fuse) {
         console.log('Reinitializing Fuse');
-        fuse = new Fuse(allTabs, fuseOptions);
+        fuse = new Fuse(allItems, fuseOptions);
       }
       const results = fuse.search(searchQuery);
-      filteredTabs = results.map(result => result.item);
-      updateSearchStats(results.length, allTabs.length);
+      filteredItems = results.map(result => result.item);
+      updateSearchStats(results.length, allItems.length);
     } else {
-      updateSearchStats(allTabs.length, allTabs.length);
+      updateSearchStats(allItems.length, allItems.length);
     }
 
-    renderTabs(filteredTabs, searchQuery);
+    renderItems(filteredItems, searchQuery);
   }
 
-  function renderTabs(tabs, searchQuery) {
-    console.log('Rendering tabs:', tabs.length);
+  function renderItems(items, searchQuery) {
+    console.log('Rendering items:', items.length);
     tabsList.innerHTML = '';
     
-    if (!tabs || tabs.length === 0) {
-      tabsList.innerHTML = '<div class="tab-item">No matching tabs</div>';
+    if (!items || items.length === 0) {
+      tabsList.innerHTML = '<div class="item">No matching items</div>';
       return;
     }
 
-    tabs.forEach((tab, index) => {
-      const tabElement = document.createElement('div');
-      tabElement.className = 'tab-item' + (index === selectedIndex ? ' selected' : '');
+    items.forEach((item, index) => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'item' + (index === selectedIndex ? ' selected' : '');
+      
+      // Add icon based on type
+      const icon = item.type === 'tab' ? '📄' : '🔖';
       
       // Highlight matching text if there's a search query
-      const titleHtml = searchQuery ? highlightMatches(tab.title, searchQuery) : tab.title;
-      const urlHtml = searchQuery ? highlightMatches(tab.url, searchQuery) : tab.url;
+      const titleHtml = searchQuery ? highlightMatches(item.title || '', searchQuery) : (item.title || '');
+      const urlHtml = searchQuery ? highlightMatches(item.url || '', searchQuery) : (item.url || '');
 
-      tabElement.innerHTML = `
-        <div class="tab-title">${titleHtml}</div>
+      itemElement.innerHTML = `
+        <div class="tab-title">${icon} ${titleHtml}</div>
         <div class="tab-url">${urlHtml}</div>
       `;
 
-      tabElement.addEventListener('click', function() {
-        chrome.tabs.update(tab.id, { active: true });
-        chrome.windows.update(tab.windowId, { focused: true });
+      itemElement.addEventListener('click', function() {
+        if (item.type === 'tab') {
+          chrome.tabs.update(item.id, { active: true });
+          chrome.windows.update(item.windowId, { focused: true });
+        } else {
+          // For bookmarks, open in new tab and switch to it
+          chrome.tabs.create({ url: item.url, active: true });
+        }
         window.close();
       });
 
-      tabElement.addEventListener('mouseover', function() {
+      itemElement.addEventListener('mouseover', function() {
         selectedIndex = index;
         updateSelection();
       });
 
-      tabsList.appendChild(tabElement);
+      tabsList.appendChild(itemElement);
     });
 
     // Ensure selected item is visible
@@ -157,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function updateSelection() {
-    const items = tabsList.getElementsByClassName('tab-item');
+    const items = tabsList.getElementsByClassName('item');
     for (let i = 0; i < items.length; i++) {
       items[i].classList.toggle('selected', i === selectedIndex);
     }
@@ -165,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function updateSearchStats(matchCount, totalCount) {
-    searchStats.textContent = `Showing ${matchCount} of ${totalCount} tabs`;
+    searchStats.textContent = `Showing ${matchCount} of ${totalCount} items`;
   }
 
   function highlightMatches(text, query) {

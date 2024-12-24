@@ -35,22 +35,25 @@
       overflow-y: auto;
       margin-top: 10px;
     }
-    .tab-item {
+    .item {
       padding: 10px;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s;
       margin-bottom: 4px;
     }
-    .tab-item:hover {
+    .item:hover {
       background-color: #f5f5f5;
     }
-    .tab-item.selected {
+    .item.selected {
       background-color: #e3f2fd;
     }
     .tab-title {
       font-weight: bold;
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .tab-url {
       color: #666;
@@ -58,6 +61,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-left: 24px;
     }
     .highlight {
       background-color: #fff3cd;
@@ -88,7 +92,7 @@
   </style>
 </head>
 <body>
-  <input type="text" id="searchInput" placeholder="Search tabs... (&uarr;&darr; to navigate, Enter to switch, Esc to close)" autofocus>
+  <input type="text" id="searchInput" placeholder="Search tabs and bookmarks... (&uarr;&darr; to navigate, Enter to switch, Esc to close)" autofocus>
   <div class="search-stats" id="searchStats"></div>
   <div id="tabsList"></div>
   <div class="shortcuts">
