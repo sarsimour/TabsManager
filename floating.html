@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tabs Manager</title>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      width: 600px;
+      height: 600px;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    #searchInput:focus {
+      border-color: #4285f4;
+    }
+    #tabsList {
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .tab-item {
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+    .tab-item:hover {
+      background-color: #f5f5f5;
+    }
+    .tab-item.selected {
+      background-color: #e3f2fd;
+    }
+    .tab-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .tab-url {
+      color: #666;
+      font-size: 0.8em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .highlight {
+      background-color: #fff3cd;
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+    .search-stats {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .shortcuts {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #666;
+      background: white;
+      padding: 5px;
+    }
+    kbd {
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 2px 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="searchInput" placeholder="Search tabs... (&uarr;&darr; to navigate, Enter to switch, Esc to close)" autofocus>
+  <div class="search-stats" id="searchStats"></div>
+  <div id="tabsList"></div>
+  <div class="shortcuts">
+    <kbd>&uarr;&darr;</kbd> Navigate 
+    <kbd>Enter</kbd> Switch 
+    <kbd>Esc</kbd> Close
+  </div>
+  <script src="lib/fuse.js"></script>
+  <script src="floating.js"></script>
+</body>
+</html> 

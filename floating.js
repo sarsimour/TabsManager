@@ -16,8 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
     findAllMatches: true
   };
 
-  // Load all tabs when popup opens
+  // Load all tabs when window opens
   loadTabs();
+  
+  // Focus search input immediately
+  searchInput.focus();
 
   // Add search functionality
   searchInput.addEventListener('input', function(e) {
@@ -25,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Add keyboard navigation
-  searchInput.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function(e) {
     const items = tabsList.getElementsByClassName('tab-item');
     
     switch(e.key) {
@@ -43,13 +46,26 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         if (selectedIndex >= 0 && items[selectedIndex]) {
           items[selectedIndex].click();
+          window.close();
         }
+        break;
+      case 'Escape':
+        window.close();
+        break;
+      case 'PageDown':
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 5, items.length - 1);
+        updateSelection();
+        break;
+      case 'PageUp':
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 5, 0);
+        updateSelection();
         break;
     }
   });
 
   function loadTabs() {
-    // Query for tabs in all windows
     chrome.tabs.query({}, function(tabs) {
       console.log('Loaded tabs:', tabs);
       if (chrome.runtime.lastError) {
@@ -122,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tabElement.addEventListener('click', function() {
         chrome.tabs.update(tab.id, { active: true });
         chrome.windows.update(tab.windowId, { focused: true });
+        window.close();
       });
 
       tabElement.addEventListener('mouseover', function() {
