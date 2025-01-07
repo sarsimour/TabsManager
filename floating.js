@@ -3,21 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
   const tabsList = document.getElementById('tabsList');
   const searchStats = document.getElementById('searchStats');
   let allItems = [];
+  let filteredItems = [];
   let selectedIndex = -1;
   let fuse = null;
+  let favorites = new Set();
 
   // Initialize Fuse.js options with weights for different fields
   const fuseOptions = {
     keys: [
-      { name: 'title', weight: 0.4 },
+      { name: 'title', weight: 0.5 },
       { name: 'url', weight: 0.3 },
-      { name: 'type', weight: 0.3 }
+      { name: 'type', weight: 0.2 }
     ],
     includeScore: true,
-    threshold: 0.4,
+    threshold: 0.3,
     shouldSort: true,
     minMatchCharLength: 2,
-    findAllMatches: true
+    findAllMatches: true,
+    distance: 100,
+    useExtendedSearch: true,
+    ignoreLocation: true
   };
 
   // Load all items when window opens
@@ -68,6 +73,23 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
     }
   });
+
+  // Load saved data
+  chrome.storage.local.get(['favorites'], function(result) {
+    favorites = new Set(result.favorites || []);
+  });
+
+  // Toggle favorite status
+  function toggleFavorite(item) {
+    const itemKey = `${item.type}-${item.id}`;
+    if (favorites.has(itemKey)) {
+      favorites.delete(itemKey);
+    } else {
+      favorites.add(itemKey);
+    }
+    chrome.storage.local.set({ favorites: Array.from(favorites) });
+    renderItems(filteredItems || allItems, searchInput.value);
+  }
 
   function loadAllItems() {
     Promise.all([loadTabs(), loadAllBookmarks()])
@@ -139,7 +161,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function displayAllItems() {
-    renderItems(allItems, '');
+    filteredItems = allItems;
+    renderItems(filteredItems, '');
     updateSearchStats(allItems.length, allItems.length);
   }
 
@@ -149,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    let filteredItems = allItems;
     selectedIndex = 0;
 
     if (searchQuery.trim()) {
@@ -159,8 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       const results = fuse.search(searchQuery);
       filteredItems = results.map(result => result.item);
-      updateSearchStats(results.length, allItems.length);
+      updateSearchStats(filteredItems.length, allItems.length);
     } else {
+      filteredItems = allItems;
       updateSearchStats(allItems.length, allItems.length);
     }
 
@@ -176,21 +199,35 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
+    // Sort items to show favorites first
+    items.sort((a, b) => {
+      const aFav = favorites.has(`${a.type}-${a.id}`);
+      const bFav = favorites.has(`${b.type}-${b.id}`);
+      return bFav - aFav;
+    });
+
     items.forEach((item, index) => {
       const itemElement = document.createElement('div');
-      itemElement.className = 'item' + (index === selectedIndex ? ' selected' : '');
+      const isFavorite = favorites.has(`${item.type}-${item.id}`);
+      itemElement.className = `item${index === selectedIndex ? ' selected' : ''}${isFavorite ? ' favorite' : ''}`;
       
-      // Add icon based on type
       const icon = item.type === 'tab' ? '📄' : '🔖';
+      const favIcon = isFavorite ? '⭐' : '☆';
       
-      // Highlight matching text if there's a search query
       const titleHtml = searchQuery ? highlightMatches(item.title || '', searchQuery) : (item.title || '');
       const urlHtml = searchQuery ? highlightMatches(item.url || '', searchQuery) : (item.url || '');
 
       itemElement.innerHTML = `
-        <div class="tab-title">${icon} ${titleHtml}</div>
+        <div class="tab-title">${icon} ${titleHtml} <span class="favorite-icon">${favIcon}</span></div>
         <div class="tab-url">${urlHtml}</div>
       `;
+
+      // Add click handler for favorite icon
+      const favIconElement = itemElement.querySelector('.favorite-icon');
+      favIconElement.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(item);
+      });
 
       itemElement.addEventListener('click', function() {
         if (item.type === 'tab') {

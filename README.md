@@ -1,54 +1,93 @@
-# Tabs Manager Chrome Extension
+# Tabs Manager
 
-A Chrome extension for managing tabs and bookmarks efficiently. Works with Chrome, Arc, and other Chromium-based browsers.
+A powerful and efficient Chrome extension for managing tabs and bookmarks with lightning-fast search capabilities.
+
+![Chrome Web Store](https://img.shields.io/chrome-web-store/v/[your-extension-id])
+![Users](https://img.shields.io/chrome-web-store/users/[your-extension-id])
+![Rating](https://img.shields.io/chrome-web-store/rating/[your-extension-id])
 
 ## Features
-- Fast fuzzy search across all open tabs and bookmarks
-- Keyboard-driven navigation
+
+✨ **Instant Search**
+- Lightning-fast fuzzy search across all tabs and bookmarks
 - Search in both titles and URLs
-- Quick switching between tabs and bookmarks
-- Clean and simple interface
-- Browser compatibility: Chrome, Arc, Edge, Brave, and other Chromium-based browsers
+- Smart results ranking based on relevance
 
-## Installation Instructions
-1. Open your browser and go to `chrome://extensions/` (or equivalent)
-2. Enable "Developer mode" in the top right corner
-3. Click "Load unpacked" and select this directory
-4. Configure keyboard shortcut (recommended):
-   - Go to `chrome://extensions/shortcuts`
-   - Find "Tabs Manager"
-   - Set shortcut to `Ctrl+K` (Windows/Linux) or `Cmd+K` (Mac)
+⭐ **Favorites System**
+- Star important tabs and bookmarks for quick access
+- Favorites always appear at the top of results
+- Persistent across browser sessions
 
-## How to Use
+⌨️ **Keyboard-First Navigation**
+- Quick access with `Cmd+K` (Mac) or `Ctrl+K` (Windows/Linux)
+- Arrow keys for navigation
+- Enter to switch tabs
+- Escape to close
+- Page Up/Down for faster scrolling
 
-### Opening the Tab Manager
-Two ways to open:
-- Click the extension icon in browser toolbar
-- Press `Ctrl+K` (Windows/Linux) or `Cmd+K` (Mac) after setting up the shortcut
+🎯 **Smart Features**
+- Unified search across tabs and bookmarks
+- Visual distinction between tabs and bookmarks
+- Instant tab switching
+- Opens bookmarks in new tabs
 
-### Keyboard Navigation
-- Type to search across all tabs and bookmarks
-- Use `↑` `↓` arrows to navigate through results
-- Press `Enter` to switch to selected tab or open bookmark
-- Press `Esc` to close the manager
+## Installation
 
-### Search Tips
+### From Chrome Web Store
+1. Visit [Chrome Web Store Link]
+2. Click "Add to Chrome"
+3. Click "Add Extension" in the popup
+
+### For Development
+1. Clone this repository
+2. Open Chrome and go to `chrome://extensions/`
+3. Enable "Developer mode" in the top right
+4. Click "Load unpacked" and select the extension directory
+5. The extension icon will appear in your browser toolbar
+
+## Usage
+
+### Opening the Manager
+- Click the extension icon in your browser toolbar, or
+- Use keyboard shortcut: `Cmd+K` (Mac) or `Ctrl+K` (Windows/Linux)
+
+### Basic Operations
+- **Search**: Just start typing to search across tabs and bookmarks
+- **Navigate**: Use ↑/↓ arrow keys or mouse to select items
+- **Switch/Open**: Press Enter or click to switch to a tab or open a bookmark
+- **Favorite**: Click the star icon (☆) to favorite/unfavorite an item
+- **Close**: Press Esc or click outside to close the manager
+
+### Tips
 - Search matches both titles and URLs
-- Fuzzy search allows for typos and partial matches
-- Results are sorted by relevance
+- Favorites are automatically sorted to the top
 - Tabs are marked with 📄 and bookmarks with 🔖
 - The current number of matching items is shown below the search box
 
-### Mouse Navigation
-- Hover over items to select them
-- Click any item to switch to it
-- Click outside the popup to close it
+## Browser Compatibility
+- Google Chrome
+- Microsoft Edge
+- Brave Browser
+- Arc Browser
+- Other Chromium-based browsers
 
-## Next Steps
-- Add tab grouping features
-- Improve search with content analysis
-- Add custom tags and categories
-- Support for browser history
+## Privacy
+This extension:
+- Does not collect any user data
+- Does not require any external services
+- Stores favorites locally in your browser
+- Does not require any special permissions beyond tabs and bookmarks access
 
 ## Contributing
-Feel free to submit issues and enhancement requests!
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## License
+MIT License - see LICENSE file for details
+
+## Support
+If you encounter any issues or have suggestions, please:
+1. Check the [Issues](https://github.com/[your-username]/tabs-manager/issues) page
+2. Create a new issue if your problem isn't already listed
+
+---
+Made with ❤️ for better tab management
