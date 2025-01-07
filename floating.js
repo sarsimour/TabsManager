@@ -211,19 +211,54 @@ document.addEventListener('DOMContentLoaded', function() {
       const isFavorite = favorites.has(`${item.type}-${item.id}`);
       itemElement.className = `item${index === selectedIndex ? ' selected' : ''}${isFavorite ? ' favorite' : ''}`;
       
-      const icon = item.type === 'tab' ? '📄' : '🔖';
-      const favIcon = isFavorite ? '⭐' : '☆';
+      // Create favicon/icon element
+      const iconElement = document.createElement('div');
+      iconElement.className = 'item-icon';
+      
+      if (item.type === 'tab' && item.favIconUrl) {
+        const img = document.createElement('img');
+        img.src = item.favIconUrl;
+        img.onerror = function() {
+          // Fallback to emoji if favicon fails to load
+          iconElement.textContent = '📄';
+        };
+        iconElement.appendChild(img);
+      } else {
+        // Use emoji for bookmarks or tabs without favicon
+        iconElement.textContent = item.type === 'tab' ? '📄' : '🔖';
+      }
+
+      // Create content container
+      const contentElement = document.createElement('div');
+      contentElement.className = 'item-content';
       
       const titleHtml = searchQuery ? highlightMatches(item.title || '', searchQuery) : (item.title || '');
       const urlHtml = searchQuery ? highlightMatches(item.url || '', searchQuery) : (item.url || '');
 
-      itemElement.innerHTML = `
-        <div class="tab-title">${icon} ${titleHtml} <span class="favorite-icon">${favIcon}</span></div>
-        <div class="tab-url">${urlHtml}</div>
-      `;
+      // Create title element
+      const titleElement = document.createElement('div');
+      titleElement.className = 'tab-title';
+      titleElement.innerHTML = titleHtml;
+
+      // Create URL element
+      const urlElement = document.createElement('div');
+      urlElement.className = 'tab-url';
+      urlElement.innerHTML = urlHtml;
+
+      // Create favorite icon
+      const favIconElement = document.createElement('div');
+      favIconElement.className = 'favorite-icon';
+      favIconElement.textContent = isFavorite ? '⭐' : '☆';
+      
+      // Assemble the elements
+      contentElement.appendChild(titleElement);
+      contentElement.appendChild(urlElement);
+      
+      itemElement.appendChild(iconElement);
+      itemElement.appendChild(contentElement);
+      itemElement.appendChild(favIconElement);
 
       // Add click handler for favorite icon
-      const favIconElement = itemElement.querySelector('.favorite-icon');
       favIconElement.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleFavorite(item);

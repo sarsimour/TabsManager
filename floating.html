@@ -11,7 +11,7 @@
       padding: 0;
     }
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
       background-color: white;
       padding: 20px;
       box-sizing: border-box;
@@ -36,11 +36,14 @@
       margin-top: 10px;
     }
     .item {
-      padding: 10px;
-      border-radius: 4px;
+      padding: 12px;
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     .item:hover {
       background-color: #f5f5f5;
@@ -48,20 +51,41 @@
     .item.selected {
       background-color: #e3f2fd;
     }
-    .tab-title {
-      font-weight: bold;
-      margin-bottom: 4px;
+    .item-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background-color: #f5f5f5;
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      overflow: hidden;
     }
-    .tab-url {
-      color: #666;
-      font-size: 0.8em;
+    .item-icon img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+    .item-content {
+      flex-grow: 1;
+      min-width: 0;
+    }
+    .tab-title {
+      font-weight: 500;
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      padding-left: 24px;
+      color: #000;
+      font-size: 14px;
+    }
+    .tab-url {
+      color: #666;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .highlight {
       background-color: #fff3cd;
@@ -90,9 +114,9 @@
     }
     .favorite-icon {
       cursor: pointer;
-      margin-left: auto;
       opacity: 0.6;
       transition: opacity 0.2s;
+      margin-left: 8px;
     }
     .favorite-icon:hover {
       opacity: 1;
@@ -106,11 +130,11 @@
   </style>
 </head>
 <body>
-  <input type="text" id="searchInput" placeholder="Search tabs and bookmarks... (&uarr;&darr; to navigate, Enter to switch, Esc to close)" autofocus>
+  <input type="text" id="searchInput" placeholder="Search tabs and bookmarks... (↑↓ to navigate, Enter to switch, Esc to close)" autofocus>
   <div class="search-stats" id="searchStats"></div>
   <div id="tabsList"></div>
   <div class="shortcuts">
-    <kbd>&uarr;&darr;</kbd> Navigate 
+    <kbd>↑↓</kbd> Navigate 
     <kbd>Enter</kbd> Switch 
     <kbd>Esc</kbd> Close
   </div>
