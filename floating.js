@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedIndex = -1;
   let fuse = null;
   let favorites = new Set();
+  let tabScorer = new TabScorer();
 
   // Initialize Fuse.js options with weights for different fields
   const fuseOptions = {
@@ -199,11 +200,26 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    // Sort items to show favorites first
+    // Sort items to show favorites first, then by score
     items.sort((a, b) => {
       const aFav = favorites.has(`${a.type}-${a.id}`);
       const bFav = favorites.has(`${b.type}-${b.id}`);
-      return bFav - aFav;
+      
+      if (aFav !== bFav) {
+        return bFav - aFav;
+      }
+      
+      // If both are tabs, use scoring
+      if (a.type === 'tab' && b.type === 'tab') {
+        return tabScorer.getTabScore(b.id) - tabScorer.getTabScore(a.id);
+      }
+      
+      // If only one is a tab, prefer it
+      if (a.type === 'tab') return -1;
+      if (b.type === 'tab') return 1;
+      
+      // For bookmarks, keep original order
+      return 0;
     });
 
     items.forEach((item, index) => {
