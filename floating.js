@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Load all items when window opens
   loadAllItems();
   
+  // Initialize with first item selected
+  selectedIndex = 0;
+
   // Focus search input immediately
   searchInput.focus();
 
@@ -65,6 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!e.shiftKey && !e.ctrlKey && !e.metaKey) {
           e.preventDefault();
           enterSearchMode();
+        }
+        break;
+      case 'Enter':
+        e.preventDefault();
+        const items = tabsList.getElementsByClassName('item');
+        if (selectedIndex >= 0 && items[selectedIndex]) {
+          items[selectedIndex].click();
+          window.close();
         }
         break;
       case 'Escape':
@@ -240,8 +251,6 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    selectedIndex = 0;
-
     if (searchQuery.trim()) {
       if (!fuse) {
         console.log('Reinitializing Fuse');
@@ -367,7 +376,13 @@ document.addEventListener('DOMContentLoaded', function() {
         window.close();
       });
 
+      let hasMouseMoved = false;
       itemElement.addEventListener('mouseover', function() {
+        if (!hasMouseMoved) {
+          // Ignore the first mouseover event when popup opens
+          hasMouseMoved = true;
+          return;
+        }
         selectedIndex = index;
         updateSelection();
       });
@@ -375,10 +390,10 @@ document.addEventListener('DOMContentLoaded', function() {
       tabsList.appendChild(itemElement);
     });
 
-    // Ensure selected item is visible
-    const selectedItem = tabsList.children[selectedIndex];
-    if (selectedItem) {
-      selectedItem.scrollIntoView({ block: 'nearest' });
+    // Ensure first item is selected
+    if (items.length > 0) {
+      selectedIndex = 0;
+      updateSelection();
     }
   }
 
