@@ -1,93 +1,96 @@
 # Tabs Manager
 
-A powerful and efficient Chrome extension for managing tabs and bookmarks with lightning-fast search capabilities.
-
-![Chrome Web Store](https://img.shields.io/chrome-web-store/v/[your-extension-id])
-![Users](https://img.shields.io/chrome-web-store/users/[your-extension-id])
-![Rating](https://img.shields.io/chrome-web-store/rating/[your-extension-id])
+A powerful Chrome extension for efficient tab management with quick search, keyboard navigation, and smart organization features.
 
 ## Features
 
-✨ **Instant Search**
-- Lightning-fast fuzzy search across all tabs and bookmarks
-- Search in both titles and URLs
-- Smart results ranking based on relevance
+### 🔍 Smart Search & Navigation
+- Lightning-fast tab search with fuzzy matching
+- Keyboard-first navigation for quick access
+- Search through tab titles and content
 
-⭐ **Favorites System**
-- Star important tabs and bookmarks for quick access
-- Favorites always appear at the top of results
-- Persistent across browser sessions
+### 📊 Intelligent Tab Organization
+- Most recently used (MRU) tab ordering
+- Domain-based tab grouping
+- Smart ranking based on usage patterns
+- Support for multi-window management
 
-⌨️ **Keyboard-First Navigation**
-- Quick access with `Cmd+K` (Mac) or `Ctrl+K` (Windows/Linux)
-- Arrow keys for navigation
-- Enter to switch tabs
-- Escape to close
-- Page Up/Down for faster scrolling
-
-🎯 **Smart Features**
-- Unified search across tabs and bookmarks
-- Visual distinction between tabs and bookmarks
-- Instant tab switching
-- Opens bookmarks in new tabs
+### ⌨️ Keyboard Shortcuts
+- Quick access with Command+K (Mac) / Ctrl+K (Windows)
+- Arrow key navigation
+- Vim-style keyboard shortcuts (coming soon)
 
 ## Installation
 
 ### From Chrome Web Store
-1. Visit [Chrome Web Store Link]
+1. Visit the [Tabs Manager](chrome_web_store_link) page in the Chrome Web Store
 2. Click "Add to Chrome"
-3. Click "Add Extension" in the popup
+3. Click "Add extension" in the popup
 
-### For Development
-1. Clone this repository
-2. Open Chrome and go to `chrome://extensions/`
+### From Source
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/sarsimour/TabsManager.git
+   ```
+2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top right
 4. Click "Load unpacked" and select the extension directory
-5. The extension icon will appear in your browser toolbar
 
 ## Usage
 
-### Opening the Manager
-- Click the extension icon in your browser toolbar, or
-- Use keyboard shortcut: `Cmd+K` (Mac) or `Ctrl+K` (Windows/Linux)
-
 ### Basic Operations
-- **Search**: Just start typing to search across tabs and bookmarks
-- **Navigate**: Use ↑/↓ arrow keys or mouse to select items
-- **Switch/Open**: Press Enter or click to switch to a tab or open a bookmark
-- **Favorite**: Click the star icon (☆) to favorite/unfavorite an item
-- **Close**: Press Esc or click outside to close the manager
+1. Press `Command+K` (Mac) or `Ctrl+K` (Windows) to open Tabs Manager
+2. Start typing to search for tabs
+3. Use arrow keys to navigate through results
+4. Press `Enter` to switch to selected tab
 
-### Tips
-- Search matches both titles and URLs
-- Favorites are automatically sorted to the top
-- Tabs are marked with 📄 and bookmarks with 🔖
-- The current number of matching items is shown below the search box
-
-## Browser Compatibility
-- Google Chrome
-- Microsoft Edge
-- Brave Browser
-- Arc Browser
-- Other Chromium-based browsers
+### Advanced Features
+- **Tab Groups**: Automatically groups tabs by domain
+- **Smart Ranking**: Frequently used tabs appear higher in results
+- **Multi-Window Support**: Search and manage tabs across all windows
+- **Bookmark Integration**: Quick access to bookmarks
 
 ## Privacy
-This extension:
-- Does not collect any user data
-- Does not require any external services
-- Stores favorites locally in your browser
-- Does not require any special permissions beyond tabs and bookmarks access
+
+Tabs Manager respects your privacy:
+- Works completely offline
+- No data collection or tracking
+- All data stays local to your browser
+- Open source for transparency
+
+## Development
+
+### Prerequisites
+- Google Chrome or Chromium-based browser
+- Basic knowledge of JavaScript and Chrome Extension APIs
+
+### Setup
+1. Clone the repository
+2. Make your changes
+3. Load unpacked extension in Chrome
+
+### Building
+```bash
+# Install dependencies
+npm install
+
+# Build extension
+npm run build
+```
 
 ## Contributing
-Contributions are welcome! Please feel free to submit issues and pull requests.
 
-## License
-MIT License - see LICENSE file for details
+We welcome contributions! Please feel free to:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a Pull Request
 
 ## Support
-If you encounter any issues or have suggestions, please:
-1. Check the [Issues](https://github.com/[your-username]/tabs-manager/issues) page
-2. Create a new issue if your problem isn't already listed
 
----
-Made with ❤️ for better tab management
+- Report bugs: [Issue Tracker](https://github.com/sarsimour/TabsManager/issues)
+- Request features: [Feature Requests](https://github.com/sarsimour/TabsManager/issues)
+- Get help: [Discussions](https://github.com/sarsimour/TabsManager/discussions)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
