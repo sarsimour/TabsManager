@@ -7,7 +7,6 @@
   "author": "Sarsimour",
   "support_url": "https://github.com/sarsimour/TabsManager/issues",
   "permissions": [
-    "tabs",
     "bookmarks",
     "activeTab",
     "commands",
